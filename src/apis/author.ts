@@ -17,3 +17,9 @@ export const getAuthors = async () => {
   const authors = z.object({ data: z.array(authorSchema) }).parse(data);
   return authors;
 };
+
+export const deleteAuthor = async (id: string) => {
+  return await fetch(`/api/authors/${id}`, {
+    method: "DELETE",
+  });
+};

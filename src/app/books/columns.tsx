@@ -6,6 +6,15 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Book } from "@/types/books";
 import { Badge } from "@/components/ui/badge";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteBook } from "@/apis/books";
+import { toast } from "@/components/ui/use-toast";
+import { ToastAction } from "@/components/ui/toast";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export const columns: ColumnDef<Book>[] = [
   {
@@ -39,18 +48,70 @@ export const columns: ColumnDef<Book>[] = [
 
   {
     id: "actions",
-    cell: ({ row }) => {
+    cell: function Cell({ row }) {
+      const queryClient = useQueryClient();
+      const mutation = useMutation({
+        mutationFn: deleteBook,
+        onSuccess: async () => {
+          toast({
+            variant: "success",
+            description: "Book deleted successfully.",
+          });
+          return await Promise.all([
+            queryClient.invalidateQueries({ queryKey: ["authors"] }),
+            queryClient.invalidateQueries({ queryKey: ["books"] }),
+          ]);
+        },
+        onError: (error) => {
+          toast({
+            variant: "destructive",
+            description: error.message,
+          });
+        },
+      });
       const book = row.original;
+
       return (
         <div className="float-right space-x-2 flex gap-2">
-          <Button variant="link" asChild className="p-0 m-0">
-            <Link href={`/books/edit/${book.id}`}>
-              <Pencil className="h-3 w-3" />
-            </Link>
-          </Button>
-          <Button variant="link" className="p-0 m-0">
-            <Trash className="h-3 w-3" />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="link" asChild className="p-0 m-0">
+                <Link href={`/books/edit/${book.id}`}>
+                  <Pencil className="h-3 w-3" />
+                </Link>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Edit book</p>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="link"
+                className="p-0 m-0"
+                onClick={() => {
+                  toast({
+                    title: "Confirm delete.",
+                    description: "Are you sure you want to delete this book?",
+                    action: (
+                      <ToastAction
+                        onClick={() => mutation.mutate(book.id)}
+                        altText="Try again"
+                      >
+                        Comfirm
+                      </ToastAction>
+                    ),
+                  });
+                }}
+              >
+                <Trash className="h-3 w-3" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Delete book</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       );
     },

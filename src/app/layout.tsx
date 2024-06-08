@@ -6,6 +6,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { ReactQueryClientProvider } from "@/components/react-query-provider";
 import { MockProvider } from "@/components/mock-provider";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -28,9 +29,11 @@ export default function RootLayout({
       >
         <ReactQueryClientProvider>
           <MockProvider>
-            <Header />
-            {children}
-            <Toaster />
+            <TooltipProvider>
+              <Header />
+              {children}
+              <Toaster />
+            </TooltipProvider>
           </MockProvider>
         </ReactQueryClientProvider>
       </body>

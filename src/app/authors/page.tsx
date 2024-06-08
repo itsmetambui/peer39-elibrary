@@ -17,12 +17,16 @@ import {
 } from "@/components/ui/breadcrumb";
 
 export default function AuthorsPage() {
-  const { data: response, status } = useQuery({
+  const {
+    data: response,
+    isPending,
+    isError,
+  } = useQuery({
     queryKey: ["authors"],
     queryFn: getAuthors,
   });
 
-  if (status === "error") {
+  if (isError) {
     return <Error />;
   }
 
@@ -40,10 +44,10 @@ export default function AuthorsPage() {
           <Link href="/authors/add">Add Author</Link>
         </Button>
       </div>
-      {status === "success" ? (
-        <DataTable data={response.data} columns={columns} />
-      ) : (
+      {isPending ? (
         <Loading />
+      ) : (
+        <DataTable data={response.data} columns={columns} />
       )}
     </div>
   );

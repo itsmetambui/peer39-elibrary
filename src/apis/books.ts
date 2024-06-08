@@ -17,3 +17,9 @@ export const getBooks = async () => {
   const books = z.object({ data: z.array(bookSchema) }).parse(data);
   return books;
 };
+
+export const deleteBook = async (id: string) => {
+  return await fetch(`/api/books/${id}`, {
+    method: "DELETE",
+  });
+};

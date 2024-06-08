@@ -25,12 +25,12 @@ const AddAuthorForm = () => {
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: addAuthor,
-    onSuccess: () => {
+    onSuccess: async () => {
       toast({
         variant: "success",
         description: "Author added successfully.",
       });
-      queryClient.invalidateQueries({ queryKey: ["authors"] });
+      return await queryClient.invalidateQueries({ queryKey: ["authors"] });
     },
   });
 

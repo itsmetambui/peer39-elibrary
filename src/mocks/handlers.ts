@@ -25,7 +25,7 @@ const timeout = (delay: number) => {
 
 export const handlers = [
   http.get("/api/authors", async () => {
-    await timeout(1000);
+    await timeout(200);
     const authors = await getAuthorsFromStorage();
     const books = await getBooksFromStorage();
 
@@ -39,7 +39,7 @@ export const handlers = [
   }),
 
   http.post("/api/authors", async ({ request }) => {
-    await timeout(1000);
+    await timeout(200);
     const body = (await request.json()) as { fullName: string };
     const newAuthor = {
       id: new Date().getTime().toString(),
@@ -54,8 +54,37 @@ export const handlers = [
     );
   }),
 
+  http.delete("/api/authors/:id", async ({ params }) => {
+    await timeout(200);
+    const authors = await getAuthorsFromStorage();
+    const books = await getBooksFromStorage();
+
+    const authorId = params.id;
+    const authorToDelete = authors.find((author) => author.id === authorId);
+
+    if (!authorToDelete) {
+      return HttpResponse.json(
+        { message: "Author not found" },
+        { status: 404 }
+      );
+    }
+
+    const updatedAuthors = authors.filter((author) => author.id !== authorId);
+    const updatedBooks = books.map((book) => ({
+      ...book,
+      authors: book.authors.filter(
+        (authorId) => authorId !== authorToDelete.id
+      ),
+    }));
+
+    sessionStorage.setItem("authors", JSON.stringify(updatedAuthors));
+    sessionStorage.setItem("books", JSON.stringify(updatedBooks));
+
+    return HttpResponse.json({ status: 204 });
+  }),
+
   http.get("/api/books", async () => {
-    await timeout(1000);
+    await timeout(200);
     const authors = await getAuthorsFromStorage();
     const books = await getBooksFromStorage();
 
@@ -70,7 +99,7 @@ export const handlers = [
   }),
 
   http.post("/api/books", async ({ request }) => {
-    await timeout(1000);
+    await timeout(200);
     const body = (await request.json()) as {
       title: string;
       publishedYear: number;
@@ -95,5 +124,21 @@ export const handlers = [
       { ...newBook, authors: authorsWithFullName },
       { status: 201 }
     );
+  }),
+
+  http.delete("/api/books/:id", async ({ params }) => {
+    await timeout(200);
+    const books = await getBooksFromStorage();
+    const bookId = params.id;
+    const bookToDelete = books.find((book) => book.id === bookId);
+
+    if (!bookToDelete) {
+      return HttpResponse.json({ message: "Book not found" }, { status: 404 });
+    }
+
+    const updatedBooks = books.filter((book) => book.id !== bookId);
+    sessionStorage.setItem("books", JSON.stringify(updatedBooks));
+
+    return HttpResponse.json({ status: 204 });
   }),
 ];

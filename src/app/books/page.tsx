@@ -17,12 +17,16 @@ import {
 import { getBooks } from "@/apis/books";
 
 export default function BooksPage() {
-  const { data: response, status } = useQuery({
+  const {
+    data: response,
+    isError,
+    isPending,
+  } = useQuery({
     queryKey: ["books"],
     queryFn: getBooks,
   });
 
-  if (status === "error") {
+  if (isError) {
     return <Error />;
   }
 
@@ -40,10 +44,10 @@ export default function BooksPage() {
           <Link href="/books/add">Add Book</Link>
         </Button>
       </div>
-      {status === "success" ? (
-        <DataTable data={response.data} columns={columns} />
-      ) : (
+      {isPending ? (
         <Loading />
+      ) : (
+        <DataTable data={response.data} columns={columns} />
       )}
     </div>
   );

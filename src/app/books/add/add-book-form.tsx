@@ -26,12 +26,15 @@ export function AddBookForm() {
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: addBook,
-    onSuccess: () => {
+    onSuccess: async () => {
       toast({
         variant: "success",
         description: "Book added successfully.",
       });
-      queryClient.invalidateQueries({ queryKey: ["books"] });
+      return await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["authors"] }),
+        queryClient.invalidateQueries({ queryKey: ["books"] }),
+      ]);
     },
     onError: (error) => {
       toast({
