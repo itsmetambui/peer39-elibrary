@@ -4,7 +4,6 @@ const getAuthorsFromStorage = async () => {
   const data = JSON.parse(sessionStorage.getItem("authors") || "[]") as {
     id: string;
     fullName: string;
-    numberOfBooks: number;
   }[];
   return data;
 };
@@ -98,6 +97,24 @@ export const handlers = [
     return HttpResponse.json({ data: booksWithAuthors });
   }),
 
+  http.get("/api/books/:id", async ({ params }) => {
+    await timeout(200);
+    const authors = await getAuthorsFromStorage();
+    const books = await getBooksFromStorage();
+    const bookId = params.id;
+    const book = books.find((book) => book.id === bookId);
+
+    if (!book) {
+      return HttpResponse.json({ message: "Book not found" }, { status: 404 });
+    }
+
+    const bookWithAuthors = book.authors.map((authorId) =>
+      authors.find((author) => author.id === authorId)
+    );
+
+    return HttpResponse.json({ ...book, authors: bookWithAuthors });
+  }),
+
   http.post("/api/books", async ({ request }) => {
     await timeout(200);
     const body = (await request.json()) as {
@@ -123,6 +140,46 @@ export const handlers = [
     return HttpResponse.json(
       { ...newBook, authors: authorsWithFullName },
       { status: 201 }
+    );
+  }),
+
+  http.put("/api/books/:id", async ({ request, params }) => {
+    await timeout(200);
+    const body = (await request.json()) as {
+      title: string;
+      publishedYear: number;
+      authors: string[];
+    };
+    const books = await getBooksFromStorage();
+    const authors = await getAuthorsFromStorage();
+
+    const bookId = params.id;
+    const bookToUpdate = books.find((book) => book.id === bookId);
+
+    if (!bookToUpdate) {
+      return HttpResponse.json({ message: "Book not found" }, { status: 404 });
+    }
+
+    const updatedBooks = books.map((book) =>
+      book.id === bookId
+        ? {
+            ...book,
+            title: body.title,
+            publishedYear: body.publishedYear,
+            authors: body.authors,
+          }
+        : book
+    );
+
+    const authorsWithFullName = body.authors.map((authorId) =>
+      authors.find((author) => author.id === authorId)
+    );
+
+    sessionStorage.setItem("books", JSON.stringify(updatedBooks));
+
+    return HttpResponse.json(
+      { ...bookToUpdate, authors: authorsWithFullName },
+      { status: 200 }
     );
   }),
 

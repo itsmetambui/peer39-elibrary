@@ -34,4 +34,4 @@ export const addBookSchema = z.object({
   }),
 });
 
-export type AddBookPayload = z.infer<typeof addBookSchema>;
+export type MutateBookPayload = z.infer<typeof addBookSchema>;
