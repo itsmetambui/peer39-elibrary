@@ -63,7 +63,11 @@ const AuthorPicker = () => {
             />
           </PopoverContent>
         </Popover>
-        <Button onClick={applySearch} variant="outline">
+        <Button
+          disabled={!selectedAuthor}
+          onClick={applySearch}
+          variant="outline"
+        >
           Apply
         </Button>
       </div>
@@ -91,7 +95,11 @@ const AuthorPicker = () => {
           </div>
         </DrawerContent>
       </Drawer>
-      <Button onClick={applySearch} variant="outline">
+      <Button
+        disabled={!selectedAuthor}
+        onClick={applySearch}
+        variant="outline"
+      >
         Apply
       </Button>
     </div>
@@ -106,7 +114,11 @@ const AuthorList = ({
   setSelectedAuthor: (author: Author | null) => void;
 }) => {
   const [search, setSearch] = useState("");
-  const { data: { data: authors = [] } = {}, isPending } = useQuery({
+  const {
+    data: { data: authors = [] } = {},
+    isPending,
+    error,
+  } = useQuery({
     queryKey: ["authors"],
     queryFn: getAuthors,
   });
@@ -124,12 +136,17 @@ const AuthorList = ({
         placeholder="Filter author..."
       />
       <CommandList>
+        {error && (
+          <p className="text-center py-6 text-sm">
+            Something went wrong. Please try again.
+          </p>
+        )}
         {isPending && (
           <CommandPrimitive.Loading className="text-center py-6 text-sm">
             Loading authors...
           </CommandPrimitive.Loading>
         )}
-        {!isPending && filteredAuthors.length === 0 && (
+        {!isPending && filteredAuthors.length === 0 && !error && (
           <CommandEmpty>No results found.</CommandEmpty>
         )}
         <CommandGroup>

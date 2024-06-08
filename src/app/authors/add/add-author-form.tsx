@@ -17,6 +17,12 @@ const AddAuthorForm = () => {
       });
       return await queryClient.invalidateQueries({ queryKey: ["authors"] });
     },
+    onError: () => {
+      toast({
+        variant: "destructive",
+        description: "Something went wrong. Please try again.",
+      });
+    },
   });
 
   if (mutation.isSuccess) {

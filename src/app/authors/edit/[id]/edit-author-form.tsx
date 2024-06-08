@@ -6,6 +6,7 @@ import { redirect, useParams } from "next/navigation";
 import { getAuthor, updateAuthor } from "@/apis/author";
 import { MutateAuthorPayload } from "@/types/author";
 import { AuthorForm } from "../../author-form";
+import { ToastAction } from "@/components/ui/toast";
 
 const EditAuthorForm = () => {
   const queryClient = useQueryClient();
@@ -17,11 +18,24 @@ const EditAuthorForm = () => {
     data: author = {
       fullName: "",
     },
+    error,
   } = useQuery({
     queryKey: ["authors", authorId],
     queryFn: () => getAuthor(authorId),
     enabled: !!authorId,
   });
+
+  if (error) {
+    toast({
+      variant: "destructive",
+      description: "Something went wrong. Please try again.",
+      action: (
+        <ToastAction onClick={() => window.location.reload()} altText="Refresh">
+          Refresh
+        </ToastAction>
+      ),
+    });
+  }
 
   const mutation = useMutation({
     mutationFn: (author: MutateAuthorPayload) => updateAuthor(authorId, author),
@@ -35,10 +49,10 @@ const EditAuthorForm = () => {
         queryClient.invalidateQueries({ queryKey: ["books"] }),
       ]);
     },
-    onError: (error) => {
+    onError: () => {
       toast({
         variant: "destructive",
-        description: error.message,
+        description: "Something went wrong. Please try again.",
       });
     },
   });

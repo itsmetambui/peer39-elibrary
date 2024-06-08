@@ -20,10 +20,10 @@ const AddBookForm = () => {
         queryClient.invalidateQueries({ queryKey: ["books"] }),
       ]);
     },
-    onError: (error) => {
+    onError: () => {
       toast({
         variant: "destructive",
-        description: error.message,
+        description: "Something went wrong. Please try again.",
       });
     },
   });

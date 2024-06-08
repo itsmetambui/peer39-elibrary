@@ -6,6 +6,7 @@ import { redirect, useParams } from "next/navigation";
 import { getBook, updateBook } from "@/apis/books";
 import { BookForm } from "../../book-form";
 import { MutateBookPayload } from "@/types/books";
+import { ToastAction } from "@/components/ui/toast";
 
 const EditBookForm = () => {
   const queryClient = useQueryClient();
@@ -19,11 +20,24 @@ const EditBookForm = () => {
       publishedYear: 2024,
       authors: [],
     },
+    error,
   } = useQuery({
     queryKey: ["books", bookId],
     queryFn: () => getBook(bookId),
     enabled: !!bookId,
   });
+
+  if (error) {
+    toast({
+      variant: "destructive",
+      description: "Something went wrong. Please try again.",
+      action: (
+        <ToastAction onClick={() => window.location.reload()} altText="Refresh">
+          Refresh
+        </ToastAction>
+      ),
+    });
+  }
 
   const mutation = useMutation({
     mutationFn: (book: MutateBookPayload) => updateBook(bookId, book),
@@ -37,10 +51,10 @@ const EditBookForm = () => {
         queryClient.invalidateQueries({ queryKey: ["books"] }),
       ]);
     },
-    onError: (error) => {
+    onError: () => {
       toast({
         variant: "destructive",
-        description: error.message,
+        description: "Something went wrong. Please try again.",
       });
     },
   });
