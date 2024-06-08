@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { faker } from "@faker-js/faker";
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("http://127.0.0.1:3000/authors/add");
+  await page.goto("/authors/add");
 });
 
 test.describe("New Author", () => {
@@ -14,7 +14,7 @@ test.describe("New Author", () => {
     await fullNameInput.fill(author.fullName);
     await fullNameInput.press("Enter");
 
-    await expect(page).toHaveURL("http://127.0.0.1:3000/authors");
+    await expect(page).toHaveURL("/authors");
     await expect(page.getByText(author.fullName)).toBeVisible();
   });
 });
