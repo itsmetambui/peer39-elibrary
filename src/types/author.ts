@@ -8,10 +8,10 @@ export const authorSchema = z.object({
 
 export type Author = z.infer<typeof authorSchema>;
 
-export const addAuthorSchema = z.object({
+export const mutateAuthorSchema = z.object({
   fullName: z.string().min(1, {
     message: "Full name must be at least 1 characters.",
   }),
 });
 
-export type AddAuthorPayload = z.infer<typeof addAuthorSchema>;
+export type MutateAuthorPayload = z.infer<typeof mutateAuthorSchema>;

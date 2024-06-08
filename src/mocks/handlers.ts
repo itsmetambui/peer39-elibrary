@@ -37,6 +37,29 @@ export const handlers = [
     return HttpResponse.json({ data: authorWithBookStats });
   }),
 
+  http.get("/api/authors/:id", async ({ params }) => {
+    await timeout(200);
+    const authors = await getAuthorsFromStorage();
+    const books = await getBooksFromStorage();
+    const authorId = params.id;
+    const author = authors.find((author) => author.id === authorId);
+
+    if (!author) {
+      return HttpResponse.json(
+        { message: "Author not found" },
+        { status: 404 }
+      );
+    }
+
+    const numberOfBooks =
+      books.filter((book) => book.authors.includes(author.id)).length || 0;
+
+    return HttpResponse.json({
+      ...author,
+      numberOfBooks,
+    });
+  }),
+
   http.post("/api/authors", async ({ request }) => {
     await timeout(200);
     const body = (await request.json()) as { fullName: string };
@@ -51,6 +74,38 @@ export const handlers = [
       { ...newAuthor, numberOfBooks: 0 },
       { status: 201 }
     );
+  }),
+
+  http.put("/api/authors/:id", async ({ request, params }) => {
+    await timeout(200);
+    const body = (await request.json()) as { fullName: string };
+    const authors = await getAuthorsFromStorage();
+    const authorId = params.id;
+    const authorToUpdate = authors.find((author) => author.id === authorId);
+
+    if (!authorToUpdate) {
+      return HttpResponse.json(
+        { message: "Author not found" },
+        { status: 404 }
+      );
+    }
+
+    const updatedAuthors = authors.map((author) =>
+      author.id === authorId ? { ...author, fullName: body.fullName } : author
+    );
+
+    sessionStorage.setItem("authors", JSON.stringify(updatedAuthors));
+
+    const books = await getBooksFromStorage();
+    const numberOfBooks =
+      books.filter((book) => book.authors.includes(authorToUpdate.id)).length ||
+      0;
+
+    return HttpResponse.json({
+      ...authorToUpdate,
+      fullName: body.fullName,
+      numberOfBooks,
+    });
   }),
 
   http.delete("/api/authors/:id", async ({ params }) => {

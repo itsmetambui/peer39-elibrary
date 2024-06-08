@@ -14,30 +14,36 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { AuthorPicker } from "@/app/authors/add/author-picker";
-import { MutateBookPayload, addBookSchema } from "@/types/books";
+import { MutateBookPayload, mutateBookSchema } from "@/types/books";
 import { LoaderIcon } from "lucide-react";
 import { useEffect } from "react";
+import { AuthorPicker } from "./author-picker";
+
+type BookFormProps = {
+  onSubmit: (values: MutateBookPayload) => void;
+  defaultValues: MutateBookPayload;
+  disabled?: boolean;
+};
 
 const BookForm = ({
   onSubmit,
   defaultValues,
   disabled = false,
-}: {
-  onSubmit: (values: MutateBookPayload) => void;
-  defaultValues: MutateBookPayload;
-  disabled?: boolean;
-}) => {
+}: BookFormProps) => {
   const form = useForm<MutateBookPayload>({
-    resolver: zodResolver(addBookSchema),
-    defaultValues: defaultValues,
+    resolver: zodResolver(mutateBookSchema),
+    defaultValues,
   });
+  const {
+    reset,
+    formState: { isDirty },
+  } = form;
 
   useEffect(() => {
-    if (!form.formState.isDirty) {
-      form.reset(defaultValues);
+    if (!isDirty) {
+      reset(defaultValues);
     }
-  }, [defaultValues, form.formState.isDirty]);
+  }, [defaultValues, isDirty, reset]);
 
   return (
     <Form {...form}>

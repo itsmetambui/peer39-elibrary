@@ -24,7 +24,7 @@ export const bookSchema = z.object({
 
 export type Book = z.infer<typeof bookSchema>;
 
-export const addBookSchema = z.object({
+export const mutateBookSchema = z.object({
   title: z.string().min(1, {
     message: "Username must be at least 1 characters.",
   }),
@@ -34,4 +34,4 @@ export const addBookSchema = z.object({
   }),
 });
 
-export type MutateBookPayload = z.infer<typeof addBookSchema>;
+export type MutateBookPayload = z.infer<typeof mutateBookSchema>;

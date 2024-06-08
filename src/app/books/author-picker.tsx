@@ -16,16 +16,13 @@ export interface AuthorPickerProps
 }
 
 const AuthorPicker = forwardRef<HTMLInputElement, AuthorPickerProps>(
-  ({ value, onChange, ...props }, ref) => {
+  ({ value: selectedItems, onChange, ...props }, ref) => {
     const [inputValue, setInputValue] = useState("");
-    const [selectedItems, setSelectedItems] = useState(value);
 
-    const { data, status } = useQuery({
+    const { data: { data: options = [] } = {} } = useQuery({
       queryKey: ["authors"],
       queryFn: getAuthors,
     });
-
-    const options = data?.data ?? [];
 
     const items = useMemo(
       function getFilteredItems() {
@@ -52,7 +49,6 @@ const AuthorPicker = forwardRef<HTMLInputElement, AuthorPickerProps>(
             case useMultipleSelection.stateChangeTypes.DropdownKeyDownBackspace:
             case useMultipleSelection.stateChangeTypes
               .FunctionRemoveSelectedItem:
-              setSelectedItems(newSelectedItems);
               onChange(newSelectedItems);
               break;
             default:
@@ -101,7 +97,6 @@ const AuthorPicker = forwardRef<HTMLInputElement, AuthorPickerProps>(
           case useCombobox.stateChangeTypes.ItemClick:
           case useCombobox.stateChangeTypes.InputBlur:
             if (newSelectedItem) {
-              setSelectedItems([...selectedItems, newSelectedItem.id]);
               onChange([...selectedItems, newSelectedItem.id]);
               setInputValue("");
             }
