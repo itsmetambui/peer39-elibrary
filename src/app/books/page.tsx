@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 
 import Link from "next/link";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { columns } from "./columns";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Fragment } from "react";
@@ -15,24 +15,30 @@ import {
   BreadcrumbList,
 } from "@/components/ui/breadcrumb";
 import { getBooks } from "@/apis/books";
+import { MswError } from "@/components/msw-error";
+import { AuthorPicker } from "./author-picker";
+import { useSearchParams } from "next/navigation";
 
 export default function BooksPage() {
+  const searchParams = useSearchParams();
+  const authorId = searchParams.get("author") || undefined;
+
   const {
     data: response,
     isError,
     isPending,
   } = useQuery({
-    queryKey: ["books"],
-    queryFn: getBooks,
+    queryKey: ["books", [authorId]],
+    queryFn: () => getBooks(authorId),
   });
 
   if (isError) {
-    return <Error />;
+    return <MswError />;
   }
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between gap-2 h-10">
+      <div className="flex items-center justify-between gap-2 min-h-10 flex-wrap">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -40,9 +46,12 @@ export default function BooksPage() {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <Button asChild>
-          <Link href="/books/add">Add Book</Link>
-        </Button>
+        <div className="flex gap-2">
+          <AuthorPicker />
+          <Button asChild>
+            <Link href="/books/add">+ Add</Link>
+          </Button>
+        </div>
       </div>
       {isPending ? (
         <Loading />
@@ -67,24 +76,3 @@ const Loading = () => (
     ))}
   </div>
 );
-
-const Error = () => {
-  const queryClient = useQueryClient();
-
-  const retry = () => {
-    queryClient.fetchQuery({ queryKey: ["books"] });
-  };
-
-  return (
-    <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm">
-      <div className="flex flex-col items-center gap-1 text-center">
-        <p className="text-2xl font-bold tracking-tight">
-          Something went wrong please try again
-        </p>
-        <Button className="mt-4" variant="secondary" onClick={retry}>
-          Try again
-        </Button>
-      </div>
-    </div>
-  );
-};

@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 
 import Link from "next/link";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { columns } from "./columns";
 import { getAuthors } from "@/apis/author";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -15,6 +15,8 @@ import {
   BreadcrumbPage,
   BreadcrumbList,
 } from "@/components/ui/breadcrumb";
+import { MswError } from "@/components/msw-error";
+import { PlusCircle } from "lucide-react";
 
 export default function AuthorsPage() {
   const {
@@ -27,7 +29,7 @@ export default function AuthorsPage() {
   });
 
   if (isError) {
-    return <Error />;
+    return <MswError />;
   }
 
   return (
@@ -41,7 +43,7 @@ export default function AuthorsPage() {
           </BreadcrumbList>
         </Breadcrumb>
         <Button asChild>
-          <Link href="/authors/add">Add Author</Link>
+          <Link href="/authors/add">+ Add</Link>
         </Button>
       </div>
       {isPending ? (
@@ -67,24 +69,3 @@ const Loading = () => (
     ))}
   </div>
 );
-
-const Error = () => {
-  const queryClient = useQueryClient();
-
-  const retry = () => {
-    queryClient.fetchQuery({ queryKey: ["authors"] });
-  };
-
-  return (
-    <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm">
-      <div className="flex flex-col items-center gap-1 text-center">
-        <p className="text-2xl font-bold tracking-tight">
-          Something went wrong please try again
-        </p>
-        <Button className="mt-4" variant="secondary" onClick={retry}>
-          Try again
-        </Button>
-      </div>
-    </div>
-  );
-};

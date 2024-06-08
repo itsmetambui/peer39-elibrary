@@ -11,7 +11,7 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { CheckCircle } from "lucide-react";
 
-export function Toaster() {
+const Toaster = () => {
   const { toasts } = useToast();
 
   return (
@@ -38,4 +38,7 @@ export function Toaster() {
       <ToastViewport />
     </ToastProvider>
   );
-}
+};
+Toaster.displayName = "Toaster";
+
+export { Toaster };

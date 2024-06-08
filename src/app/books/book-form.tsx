@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { MutateBookPayload, mutateBookSchema } from "@/types/books";
 import { LoaderIcon } from "lucide-react";
 import { useEffect } from "react";
-import { AuthorPicker } from "./author-picker";
+import { AuthorAutocomplete } from "./author-autocomplete";
 
 type BookFormProps = {
   onSubmit: (values: MutateBookPayload) => void;
@@ -100,7 +100,7 @@ const BookForm = ({
             <FormItem>
               <FormLabel htmlFor="authors">Authors</FormLabel>
               <FormControl>
-                <AuthorPicker
+                <AuthorAutocomplete
                   id="authors"
                   disabled={disabled}
                   autoComplete="off"

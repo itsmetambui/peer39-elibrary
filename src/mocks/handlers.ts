@@ -24,7 +24,7 @@ const timeout = (delay: number) => {
 
 export const handlers = [
   http.get("/api/authors", async () => {
-    await timeout(200);
+    await timeout(500);
     const authors = await getAuthorsFromStorage();
     const books = await getBooksFromStorage();
 
@@ -38,7 +38,7 @@ export const handlers = [
   }),
 
   http.get("/api/authors/:id", async ({ params }) => {
-    await timeout(200);
+    await timeout(500);
     const authors = await getAuthorsFromStorage();
     const books = await getBooksFromStorage();
     const authorId = params.id;
@@ -61,7 +61,7 @@ export const handlers = [
   }),
 
   http.post("/api/authors", async ({ request }) => {
-    await timeout(200);
+    await timeout(500);
     const body = (await request.json()) as { fullName: string };
     const newAuthor = {
       id: new Date().getTime().toString(),
@@ -77,7 +77,7 @@ export const handlers = [
   }),
 
   http.put("/api/authors/:id", async ({ request, params }) => {
-    await timeout(200);
+    await timeout(500);
     const body = (await request.json()) as { fullName: string };
     const authors = await getAuthorsFromStorage();
     const authorId = params.id;
@@ -109,7 +109,7 @@ export const handlers = [
   }),
 
   http.delete("/api/authors/:id", async ({ params }) => {
-    await timeout(200);
+    await timeout(500);
     const authors = await getAuthorsFromStorage();
     const books = await getBooksFromStorage();
 
@@ -137,12 +137,18 @@ export const handlers = [
     return HttpResponse.json({ status: 204 });
   }),
 
-  http.get("/api/books", async () => {
-    await timeout(200);
+  http.get("/api/books", async ({ request }) => {
+    await timeout(500);
+    const url = new URL(request.url);
+    const authorId = url.searchParams.get("authorId");
     const authors = await getAuthorsFromStorage();
     const books = await getBooksFromStorage();
 
-    const booksWithAuthors = books.map((book) => ({
+    const filteredBooks = books.filter((book) =>
+      authorId ? book.authors.includes(authorId) : true
+    );
+
+    const booksWithAuthors = filteredBooks.map((book) => ({
       ...book,
       authors: book.authors.map((authorId) =>
         authors.find((author) => author.id === authorId)
@@ -153,7 +159,7 @@ export const handlers = [
   }),
 
   http.get("/api/books/:id", async ({ params }) => {
-    await timeout(200);
+    await timeout(500);
     const authors = await getAuthorsFromStorage();
     const books = await getBooksFromStorage();
     const bookId = params.id;
@@ -171,7 +177,7 @@ export const handlers = [
   }),
 
   http.post("/api/books", async ({ request }) => {
-    await timeout(200);
+    await timeout(500);
     const body = (await request.json()) as {
       title: string;
       publishedYear: number;
@@ -199,7 +205,7 @@ export const handlers = [
   }),
 
   http.put("/api/books/:id", async ({ request, params }) => {
-    await timeout(200);
+    await timeout(500);
     const body = (await request.json()) as {
       title: string;
       publishedYear: number;
@@ -234,12 +240,12 @@ export const handlers = [
 
     return HttpResponse.json(
       { ...bookToUpdate, authors: authorsWithFullName },
-      { status: 200 }
+      { status: 500 }
     );
   }),
 
   http.delete("/api/books/:id", async ({ params }) => {
-    await timeout(200);
+    await timeout(500);
     const books = await getBooksFromStorage();
     const bookId = params.id;
     const bookToDelete = books.find((book) => book.id === bookId);

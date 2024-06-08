@@ -18,14 +18,14 @@ interface DataTablePaginationProps<TData> {
   table: Table<TData>;
 }
 
-export function DataTablePagination<TData>({
+const DataTablePagination = <TData,>({
   table,
-}: DataTablePaginationProps<TData>) {
+}: DataTablePaginationProps<TData>) => {
   return (
     <div className="flex items-center justify-between px-2">
-      <div className="flex items-center space-x-6 lg:space-x-8">
+      <div className="flex items-center space-x-1 lg:space-x-8">
         <div className="flex items-center space-x-2">
-          <p className="text-sm font-medium">Rows per page</p>
+          <p className="text-sm font-medium">No of rows</p>
           <Select
             value={`${table.getState().pagination.pageSize}`}
             onValueChange={(value) => {
@@ -89,4 +89,7 @@ export function DataTablePagination<TData>({
       </div>
     </div>
   );
-}
+};
+DataTablePagination.displayName = "DataTablePagination";
+
+export { DataTablePagination };

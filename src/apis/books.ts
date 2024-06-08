@@ -11,8 +11,12 @@ export const addBook = async (book: MutateBookPayload) => {
   return newBook;
 };
 
-export const getBooks = async () => {
-  const response = await fetch("/api/books");
+export const getBooks = async (authorId?: string) => {
+  const url = authorId
+    ? `/api/books?${new URLSearchParams({ authorId })}`
+    : "/api/books";
+
+  const response = await fetch(url);
   const data = await response.json();
   const books = z.object({ data: z.array(bookSchema) }).parse(data);
   return books;
