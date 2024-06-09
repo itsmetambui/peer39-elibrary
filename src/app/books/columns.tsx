@@ -75,7 +75,12 @@ export const columns: ColumnDef<Book>[] = [
         <div className="float-right space-x-2 flex gap-2">
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="link" asChild className="p-0 m-0">
+              <Button
+                aria-label="Edit book"
+                variant="link"
+                asChild
+                className="p-0 m-0"
+              >
                 <Link href={`/books/edit/${book.id}`}>
                   <Pencil className="h-3 w-3" />
                 </Link>
@@ -88,6 +93,7 @@ export const columns: ColumnDef<Book>[] = [
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
+                aria-label="Delete book"
                 variant="link"
                 className="p-0 m-0"
                 onClick={() => {
@@ -99,7 +105,7 @@ export const columns: ColumnDef<Book>[] = [
                         onClick={() => mutation.mutate(book.id)}
                         altText="Try again"
                       >
-                        Comfirm
+                        Confirm
                       </ToastAction>
                     ),
                   });

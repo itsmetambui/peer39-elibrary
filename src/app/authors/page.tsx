@@ -16,11 +16,10 @@ import {
   BreadcrumbList,
 } from "@/components/ui/breadcrumb";
 import { MswError } from "@/components/msw-error";
-import { PlusCircle } from "lucide-react";
 
 export default function AuthorsPage() {
   const {
-    data: response,
+    data: authors = [],
     isPending,
     isError,
   } = useQuery({
@@ -46,11 +45,7 @@ export default function AuthorsPage() {
           <Link href="/authors/add">+ Add</Link>
         </Button>
       </div>
-      {isPending ? (
-        <Loading />
-      ) : (
-        <DataTable data={response.data} columns={columns} />
-      )}
+      {isPending ? <Loading /> : <DataTable data={authors} columns={columns} />}
     </div>
   );
 }

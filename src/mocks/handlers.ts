@@ -34,7 +34,7 @@ export const handlers = [
         books.filter((book) => book.authors.includes(author.id)).length || 0,
     }));
 
-    return HttpResponse.json({ data: authorWithBookStats });
+    return HttpResponse.json(authorWithBookStats);
   }),
 
   http.get("/api/authors/:id", async ({ params }) => {
@@ -155,7 +155,7 @@ export const handlers = [
       ),
     }));
 
-    return HttpResponse.json({ data: booksWithAuthors });
+    return HttpResponse.json({ booksWithAuthors });
   }),
 
   http.get("/api/books/:id", async ({ params }) => {

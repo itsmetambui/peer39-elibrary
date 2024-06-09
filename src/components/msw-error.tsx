@@ -8,7 +8,7 @@ const MswError = () => {
           Something went wrong please try again.
         </p>
         <p className="text-sm">
-          If you're using Chrome and have been idle for a while, this is
+          If you&apos;re using Chrome and have been idle for a while, this is
           probably happening due to the mock MSW Backend
         </p>
         <p className="text-sm">

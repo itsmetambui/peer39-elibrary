@@ -14,7 +14,7 @@ export const addAuthor = async (author: MutateAuthorPayload) => {
 export const getAuthors = async () => {
   const response = await fetch("/api/authors");
   const data = await response.json();
-  const authors = z.object({ data: z.array(authorSchema) }).parse(data);
+  const authors = z.array(authorSchema).parse(data);
   return authors;
 };
 

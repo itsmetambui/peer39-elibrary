@@ -21,7 +21,7 @@ const AuthorAutocomplete = forwardRef<
 >(({ value: selectedItems, onChange, ...props }, ref) => {
   const [inputValue, setInputValue] = useState("");
 
-  const { data: { data: options = [] } = {} } = useQuery({
+  const { data: options = [] } = useQuery({
     queryKey: ["authors"],
     queryFn: getAuthors,
   });

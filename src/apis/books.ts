@@ -18,7 +18,7 @@ export const getBooks = async (authorId?: string) => {
 
   const response = await fetch(url);
   const data = await response.json();
-  const books = z.object({ data: z.array(bookSchema) }).parse(data);
+  const books = z.array(bookSchema).parse(data);
   return books;
 };
 

@@ -115,7 +115,7 @@ const AuthorList = ({
 }) => {
   const [search, setSearch] = useState("");
   const {
-    data: { data: authors = [] } = {},
+    data: authors = [],
     isPending,
     error,
   } = useQuery({

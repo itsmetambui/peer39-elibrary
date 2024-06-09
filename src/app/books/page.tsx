@@ -24,7 +24,7 @@ export default function BooksPage() {
   const authorId = searchParams.get("author") || undefined;
 
   const {
-    data: response,
+    data: books = [],
     isError,
     isPending,
   } = useQuery({
@@ -53,11 +53,7 @@ export default function BooksPage() {
           </Button>
         </div>
       </div>
-      {isPending ? (
-        <Loading />
-      ) : (
-        <DataTable data={response.data} columns={columns} />
-      )}
+      {isPending ? <Loading /> : <DataTable data={books} columns={columns} />}
     </div>
   );
 }
