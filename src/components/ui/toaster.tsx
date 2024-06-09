@@ -1,5 +1,7 @@
 "use client";
 
+import { CheckCircle } from "lucide-react";
+
 import {
   Toast,
   ToastClose,
@@ -9,7 +11,6 @@ import {
   ToastViewport,
 } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
-import { CheckCircle } from "lucide-react";
 
 const Toaster = () => {
   const { toasts } = useToast();

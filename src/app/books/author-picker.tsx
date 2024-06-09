@@ -1,6 +1,11 @@
 "use client";
 
-import { useMediaQuery } from "@/hooks/use-media-query";
+import { useQuery } from "@tanstack/react-query";
+import { Command as CommandPrimitive } from "cmdk";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+
+import { getAuthors } from "@/apis/author";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -16,13 +21,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useState } from "react";
-import { Author } from "@/types/author";
-import { useQuery } from "@tanstack/react-query";
-import { getAuthors } from "@/apis/author";
-import { Command as CommandPrimitive } from "cmdk";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { createUrl } from "@/lib/utils";
+import { Author } from "@/types/author";
 
 const AuthorPicker = () => {
   const router = useRouter();

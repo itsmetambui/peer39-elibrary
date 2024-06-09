@@ -1,5 +1,6 @@
-import { MutateBookPayload, bookSchema } from "@/types/books";
 import { z } from "zod";
+
+import { bookSchema, MutateBookPayload } from "@/types/books";
 
 export const addBook = async (book: MutateBookPayload) => {
   const response = await fetch("/api/books", {

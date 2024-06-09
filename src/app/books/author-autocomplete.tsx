@@ -1,10 +1,11 @@
+import { useQuery } from "@tanstack/react-query";
+import { useCombobox, useMultipleSelection } from "downshift";
+import { forwardRef, useMemo, useState } from "react";
+
 import { getAuthors } from "@/apis/author";
 import { badgeVariants } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
-import { useQuery } from "@tanstack/react-query";
-import { useCombobox, useMultipleSelection } from "downshift";
-import { forwardRef, useMemo, useState } from "react";
 
 export interface AuthorAutocompleteProps
   extends Omit<

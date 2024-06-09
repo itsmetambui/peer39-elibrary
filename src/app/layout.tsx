@@ -1,12 +1,14 @@
+import "./globals.css";
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { cn } from "@/lib/utils";
-import { Header } from "@/components/ui/header";
-import "./globals.css";
-import { Toaster } from "@/components/ui/toaster";
-import { ReactQueryClientProvider } from "@/components/react-query-provider";
+
 import { MockProvider } from "@/components/mock-provider";
+import { ReactQueryClientProvider } from "@/components/react-query-provider";
+import { Header } from "@/components/ui/header";
+import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 

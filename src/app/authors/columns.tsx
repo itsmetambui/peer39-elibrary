@@ -1,19 +1,20 @@
 "use client";
 
-import { Author } from "@/types/author";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ColumnDef } from "@tanstack/react-table";
 import { Pencil, Trash } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
+
+import { deleteAuthor } from "@/apis/author";
+import { Button } from "@/components/ui/button";
+import { ToastAction } from "@/components/ui/toast";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { toast } from "@/components/ui/use-toast";
-import { ToastAction } from "@/components/ui/toast";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteAuthor } from "@/apis/author";
+import { Author } from "@/types/author";
 
 export const columns: ColumnDef<Author>[] = [
   {

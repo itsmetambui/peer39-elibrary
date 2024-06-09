@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -7,6 +8,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+
 import { EditAuthorForm } from "./edit-author-form";
 export default function EditAuthorPage({ params }: { params: { id: string } }) {
   return (

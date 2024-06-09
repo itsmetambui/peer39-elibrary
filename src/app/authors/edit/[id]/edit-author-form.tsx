@@ -1,12 +1,14 @@
 "use client";
 
-import { toast } from "@/components/ui/use-toast";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { redirect, useParams } from "next/navigation";
+
 import { getAuthor, updateAuthor } from "@/apis/author";
-import { MutateAuthorPayload } from "@/types/author";
-import { AuthorForm } from "../../author-form";
 import { ToastAction } from "@/components/ui/toast";
+import { toast } from "@/components/ui/use-toast";
+import { MutateAuthorPayload } from "@/types/author";
+
+import { AuthorForm } from "../../author-form";
 
 const EditAuthorForm = () => {
   const queryClient = useQueryClient();

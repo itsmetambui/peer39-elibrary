@@ -1,21 +1,22 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-
-import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
-import { columns } from "./columns";
-import { getAuthors } from "@/apis/author";
-import { Skeleton } from "@/components/ui/skeleton";
+import Link from "next/link";
 import { Fragment } from "react";
-import { DataTable } from "@/components/ui/data-table";
+
+import { getAuthors } from "@/apis/author";
+import { MswError } from "@/components/msw-error";
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbPage,
   BreadcrumbList,
+  BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
-import { MswError } from "@/components/msw-error";
+import { Button } from "@/components/ui/button";
+import { DataTable } from "@/components/ui/data-table";
+import { Skeleton } from "@/components/ui/skeleton";
+
+import { columns } from "./columns";
 
 export default function AuthorsPage() {
   const {

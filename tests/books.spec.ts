@@ -1,5 +1,5 @@
-import { test, expect, Locator } from "@playwright/test";
 import { faker } from "@faker-js/faker";
+import { expect, Locator,test } from "@playwright/test";
 
 test.describe("books", () => {
   test("should allow me to add new book", async ({ page }) => {

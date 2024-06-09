@@ -1,5 +1,6 @@
-import { MutateAuthorPayload, authorSchema } from "@/types/author";
 import { z } from "zod";
+
+import { authorSchema, MutateAuthorPayload } from "@/types/author";
 
 export const addAuthor = async (author: MutateAuthorPayload) => {
   const response = await fetch("/api/authors", {
