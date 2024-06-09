@@ -6,6 +6,14 @@ import { getAuthors } from "@/apis/author";
 import { badgeVariants } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { CirclePlus } from "lucide-react";
+import Link from "next/link";
 
 export interface AuthorAutocompleteProps
   extends Omit<
@@ -146,7 +154,7 @@ const AuthorAutocomplete = forwardRef<
               </span>
             );
           })}
-          <div className="flex gap-0.5 grow">
+          <div className="flex items-center gap-0.5 grow">
             <input
               placeholder="Select authors..."
               className="w-full outline-none placeholder:text-muted-foreground text-sm"
@@ -155,14 +163,18 @@ const AuthorAutocomplete = forwardRef<
                 ...getDropdownProps({ preventKeyAction: isOpen }),
               })}
             />
-            <button
-              aria-label="toggle menu"
-              className="px-2"
-              type="button"
-              {...getToggleButtonProps()}
-            >
-              &#8595;
-            </button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button className="h-4 w-4 p-0" variant="link" asChild>
+                  <Link href="/authors/add">
+                    <CirclePlus size="16" />
+                  </Link>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Add new author</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
         </div>
       </div>
