@@ -23,10 +23,22 @@ export const columns: ColumnDef<Author>[] = [
   {
     accessorKey: "fullName",
     header: "Full name",
+    cell: ({ row }) => {
+      const author = row.original;
+      return <p className="min-w-32">{author.fullName}</p>;
+    },
   },
   {
     accessorKey: "numberOfBooks",
-    header: "Number of books",
+    header: "Books",
+    cell: ({ row }) => {
+      const author = row.original;
+      return (
+        <Link className="underline" href={`/books?author=${author.id}`}>
+          {author.numberOfBooks}
+        </Link>
+      );
+    },
   },
   {
     id: "actions",

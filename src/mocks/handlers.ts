@@ -155,7 +155,7 @@ export const handlers = [
       ),
     }));
 
-    return HttpResponse.json({ booksWithAuthors });
+    return HttpResponse.json(booksWithAuthors);
   }),
 
   http.get("/api/books/:id", async ({ params }) => {

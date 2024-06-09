@@ -24,6 +24,10 @@ export const columns: ColumnDef<Book>[] = [
   {
     accessorKey: "title",
     header: "Title",
+    cell: ({ row }) => {
+      const book = row.original;
+      return <p className="min-w-60">{book.title}</p>;
+    },
   },
   {
     id: "authors",
@@ -31,7 +35,7 @@ export const columns: ColumnDef<Book>[] = [
     cell: ({ row }) => {
       const book = row.original;
       return (
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 min-w-56">
           {book.authors.map((author) => (
             <Badge key={author.id} variant="secondary">
               {author.fullName}
